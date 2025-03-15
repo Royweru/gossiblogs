@@ -27,7 +27,7 @@ const options = { next: { revalidate: 30 } };
 
 export default async function Home() {
   const posts = await client.fetch<PostType[]>(POSTS_QUERY, {}, options);
-  console.log(posts)
+  // console.log(posts)
   return (
     <>
       <HeroSection />
