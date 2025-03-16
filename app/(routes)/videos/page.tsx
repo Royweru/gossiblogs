@@ -1,4 +1,4 @@
-import React from 'react'
+import React,{Suspense} from 'react'
 import VideosClient from './videos-client'
 import { client } from '@/lib/sanity';
 
@@ -19,7 +19,10 @@ const VideosPage = async() => {
    
   
   return (
-    <VideosClient videoBlogs={posts} />
+    <Suspense fallback={<div>Loading...</div>}>
+      <VideosClient videoBlogs={posts} />
+    </Suspense>
+   
   )
 }
 

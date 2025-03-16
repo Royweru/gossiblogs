@@ -1,5 +1,6 @@
 import { client } from "@/lib/sanity";
 import PodcastsClient from "./podcast-client";
+import { Suspense } from "react";
 
 const POSTS_QUERY = `*[
   _type == "audioBlogPost"]|order(publishedAt desc){
@@ -18,7 +19,10 @@ const POSTS_QUERY = `*[
 const PodcastPage =async () => {
   const podcasts = await client.fetch(POSTS_QUERY,{},options)
   return (
-   <PodcastsClient podcastsData={podcasts} />
+    <Suspense fallback={<div>Loading...</div>}>
+       <PodcastsClient podcastsData={podcasts} />
+    </Suspense>
+ 
   );
 };
 

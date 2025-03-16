@@ -4,6 +4,7 @@ import { client } from "@/lib/sanity";
 import { MainArticle } from "@/components/blog-page/main-article";
 import { IndividualPost } from "@/types";
 import { Sidebar } from "@/components/blog-page/sidebar";
+import { Suspense } from "react";
 
 const POST_QUERY = `*[_type == "post" && slug.current == $slug][0]{
    title,
@@ -42,7 +43,8 @@ export default async function PostPage({
 //  console.log({relatedPosts})
 
   return (
-    <main className="pt-8 pb-16 lg:pt-16 lg:pb-24 lg:px-6 md:px-4 px-2 bg-white dark:bg-gray-900 antialiased">
+    <Suspense fallback={<div>Loading...</div>}>
+         <main className="pt-8 pb-16 lg:pt-16 lg:pb-24 lg:px-6 md:px-4 px-2 bg-white dark:bg-gray-900 antialiased">
       <div className="flex flex-col lg:flex-row justify-between px-4 mx-auto max-w-screen-2xl gap-8">
         {/* Main Article */}  
   <MainArticle post={post} />
@@ -50,5 +52,7 @@ export default async function PostPage({
       <Sidebar posts={relatedPosts} />
       </div>
     </main>
+    </Suspense>
+
   );
 }

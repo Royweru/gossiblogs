@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Suspense } from 'react'
 import VideoSlugPageClient from './video-slug-page-client'
 import { client } from '@/lib/sanity';
 
@@ -18,9 +18,12 @@ const VideoSlugPage = async({params}:{
 }) => {
 
   const post = await client.fetch(POST_QUERY,await params,options)
-  console.log(post)
+ 
   return (
+    <Suspense fallback={<div>Loading....</div>}>
     <VideoSlugPageClient post={post} />
+    </Suspense>
+    
   )
 }
 

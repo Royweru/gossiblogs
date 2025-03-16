@@ -1,6 +1,6 @@
-import React from 'react'
-import AudioPageIdClient from './audio-page-id-client';
-import { client } from '@/lib/sanity';
+import React, { Suspense } from "react";
+import AudioPageIdClient from "./audio-page-id-client";
+import { client } from "@/lib/sanity";
 const POST_QUERY = `*[_type == "audioBlogPost" && slug.current == $audioSlug][0]{
   title,
   body,
@@ -18,15 +18,19 @@ const POST_QUERY = `*[_type == "audioBlogPost" && slug.current == $audioSlug][0]
      }
  
 }`;
-const options = {next:{revalidate:30}}
-const AudioIdPage =async ({params}:{
-  params:Promise<{audioSlug:string}>
+const options = { next: { revalidate: 30 } };
+const AudioIdPage = async ({
+  params,
+}: {
+  params: Promise<{ audioSlug: string }>;
 }) => {
-  const post  = await client.fetch(POST_QUERY,await params,options)
-  console.log(post)
-  return (
-   <AudioPageIdClient audioBlog={post}/>
-  )
-}
+  const post = await client.fetch(POST_QUERY, await params, options);
 
-export default AudioIdPage
+  return (
+    <Suspense fallback={<div>Loading....</div>}>
+      <AudioPageIdClient audioBlog={post} />
+    </Suspense>
+  );
+};
+
+export default AudioIdPage;

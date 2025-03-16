@@ -1,5 +1,6 @@
 import { client } from "@/lib/sanity";
 import CategoryDetailsClient from "./category-details-client";
+import { Suspense } from "react";
 
 const options = { next: { revalidate: 30 } };
 const CategoryDetailsPage = async ({
@@ -21,9 +22,12 @@ const CategoryDetailsPage = async ({
   
 
   return (
-    <div className="min-h-screen  md:py-8 py-6 ">
+    <Suspense fallback={<div> Loading....</div>}>
+       <div className="min-h-screen  md:py-8 py-6 ">
       <CategoryDetailsClient posts={posts} />
     </div>
+    </Suspense>
+   
   );
 };
 
