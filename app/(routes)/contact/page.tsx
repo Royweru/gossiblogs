@@ -1,7 +1,9 @@
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
-import React, { useState } from "react";
+import React, { Suspense, useState } from "react";
 import dynamic from "next/dynamic";
+import Link from "next/link";
 
 // Dynamically import the Map component with no SSR
 const MapComponent = dynamic(() => import("@/components/map"), {
@@ -13,7 +15,8 @@ const MapComponent = dynamic(() => import("@/components/map"), {
   ),
 });
 
-const ContactPage = () => {
+// Create a wrapper component that will be wrapped in Suspense
+const ContactPageContent = () => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -23,7 +26,7 @@ const ContactPage = () => {
 
   const [formSubmitted, setFormSubmitted] = useState(false);
 
-  const handleChange = (e: { target: { name: any; value: any } }) => {
+  const handleChange = (e: { target: { name: any; value: any; }; }) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
@@ -31,7 +34,7 @@ const ContactPage = () => {
     }));
   };
 
-  const handleSubmit = (e: { preventDefault: () => void }) => {
+  const handleSubmit = (e: { preventDefault: () => void; }) => {
     e.preventDefault();
     // In a real application, you would send the form data to a server here
     console.log("Form submitted:", formData);
@@ -151,7 +154,7 @@ const ContactPage = () => {
         <div className="max-w-6xl mx-auto px-4">
           <h1 className="text-5xl font-bold text-gray-900">Contact Us</h1>
           <div className="flex items-center mt-4 text-sm text-gray-600">
-            <a href="#">Home</a>
+            <Link href={'/'}>Home</Link>
             <span className="mx-2">&gt;</span>
             <span>Contact</span>
           </div>
@@ -269,15 +272,12 @@ const ContactPage = () => {
 
           {/* Map */}
           <div className="w-full lg:w-5/12 bg-white rounded-lg shadow-sm overflow-hidden">
-            {/* Placeholder for map - in a real implementation, you would use Google Maps or similar */}
-            <div className="w-full lg:w-5/12 bg-white rounded-lg shadow-sm overflow-hidden">
-              <div className="h-64  w-full relative">
-                <MapComponent
-                  center={[-1.28333, 36.81667]} // Nairobi coordinates
-                  zoom={13}
-                  markerPosition={[40.7128, -74.006]}
-                />
-              </div>
+            <div className="h-64 w-full relative">
+              <MapComponent
+                center={[-1.28333, 36.81667]} // Nairobi coordinates
+                zoom={13}
+                markerPosition={[40.7128, -74.006]}
+              />
             </div>
 
             {/* Office Hours */}
@@ -426,8 +426,18 @@ const ContactPage = () => {
           </div>
         </div>
       </div>
-    </div>
-  );
-};
+      </div>
+  )}
 
-export default ContactPage;
+
+
+// Dynamically import the Map component with no SSR
+
+
+const ContactPage = () => (
+  <Suspense fallback={<div>Loading...</div>}>
+    <ContactPageContent />
+  </Suspense>
+);
+
+export default ContactPage

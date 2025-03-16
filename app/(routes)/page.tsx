@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { BlogSection1 } from "@/components/blogs-section1";
 import { BlogSection2 } from "@/components/blog-section2";
 import { CategoryGrid } from "@/components/category-grid";
@@ -30,21 +31,26 @@ export default async function Home() {
   // console.log(posts)
   return (
     <>
+    <Suspense fallback={<div>Loading hero section...</div>}>
       <HeroSection />
+    </Suspense>
+    <Suspense fallback={<div>Loading trending section...</div>}>
       <Trending />
-      <FeaturedStories posts={posts} />
-      <CategoryGrid posts={posts} />
-      <Newsletter />
-      <NewsGrid posts={posts} />
-      <BlogSection1
-        blogPosts={posts}
-        tagline="Latest Posts"
-        heading="Topping the charts this week"
-        description=" The most popular posts on our platform this week. "
-      />
-      <BlogSection2 posts={posts} />
-       <WatchNowSection />
-      <MustRead posts={posts} />
-    </>
+    </Suspense>
+    <FeaturedStories posts={posts} />
+    {/* Continue wrapping other components that might use useSearchParams() */}
+    <CategoryGrid posts={posts} />
+    <Newsletter />
+    <NewsGrid posts={posts} />
+    <BlogSection1
+      blogPosts={posts}
+      tagline="Latest Posts"
+      heading="Topping the charts this week"
+      description=" The most popular posts on our platform this week. "
+    />
+    <BlogSection2 posts={posts} />
+    <WatchNowSection />
+    <MustRead posts={posts} />
+  </>
   );
 }
